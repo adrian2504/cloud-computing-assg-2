@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-app-deployment
+  labels:
+    app: flask-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flask-app
+  template:
+    metadata:
+      labels:
+        app: flask-app
+    spec:
+      nodeSelector:
+        kubernetes.io/arch: "amd64"  # Ensures pods are scheduled on amd64 nodes
+      containers:
+      - name: flask-app
+        image: adrian2504/cloud-flask-app:v2 # Your Docker image
+        imagePullPolicy: Always  # Ensures the latest image is always pulled
+        env:
+        - name: MONGO_HOST
+          value: "mongodb-service"  # Matches the MongoDB service name
+        - name: MONGO_PORT
+          value: "27017"  # MongoDB's port
+        ports:
+        - containerPort: 5055  # Flask app listens on port 5055
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-app-service
+  labels:
+    app: flask-app
+spec:
+  type: NodePort  # Use NodePort for external access
+  ports:
+  - port: 5055  # Expose Flask app on port 5055
+    targetPort: 5055  # Target port for Flask app
+    nodePort: 30007  # Custom NodePort (range: 30000-32767)
+  selector:
+    app: flask-app

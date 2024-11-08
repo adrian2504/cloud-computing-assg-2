@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-app-deployment
+spec:
+  replicas: 3  # Ensure this matches the number in your original deployment if needed
+  selector:
+    matchLabels:
+      app: flask-app  # This must match labels defined in your pod template
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0   # Customize as needed
+      maxSurge: 1          # Customize as needed
+  template:
+    metadata:
+      labels:
+        app: flask-app  # Labels here must match the selector above
+    spec:
+      nodeSelector:
+        kubernetes.io/arch: "amd64"
+      containers:
+      - name: flask-app
+        image: adrian2504/cloud-flask-app:v2  # Ensure this image tag is correct and exists in your registry
+        imagePullPolicy: Always
+        env:
+        - name: MONGO_HOST
+          value: "mongodb-service"
+        - name: MONGO_PORT
+          value: "27017"
+        ports:
+        - containerPort: 5055
