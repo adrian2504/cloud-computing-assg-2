@@ -21,7 +21,7 @@ spec:
         kubernetes.io/arch: "amd64"
       containers:
       - name: flask-app
-        image: adrian2504/cloud-flask-app:v2  # Ensure this image tag is correct and exists in your registry
+        image: adrian2504/cloud-flask-app:v3  # Ensure this image tag is correct and exists in your registry
         imagePullPolicy: Always
         env:
         - name: MONGO_HOST

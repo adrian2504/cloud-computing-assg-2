@@ -18,7 +18,7 @@ spec:
         kubernetes.io/arch: "amd64"  # Ensures pods are scheduled on amd64 nodes
       containers:
       - name: flask-app
-        image: adrian2504/cloud-flask-app:v2 # Your Docker image
+        image: adrian2504/cloud-flask-app:v3 # Your Docker image
         imagePullPolicy: Always  # Ensures the latest image is always pulled
         env:
         - name: MONGO_HOST

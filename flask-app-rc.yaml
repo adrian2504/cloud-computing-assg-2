@@ -13,6 +13,6 @@ spec:
     spec:
       containers:
       - name: flask-app
-        image: adrian2504/cloud-flask-app:v2  # Use your Docker image
+        image: adrian2504/cloud-flask-app:v3  # Use your Docker image
         ports:
         - containerPort: 5055

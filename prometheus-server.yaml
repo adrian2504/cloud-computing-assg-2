@@ -1,0 +1,46 @@
+# Please edit the object below. Lines beginning with a '#' will be ignored,
+# and an empty file will abort the edit. If an error occurs while saving this file will be
+# reopened with the relevant failures.
+#
+apiVersion: v1
+data:
+  alerting_rules.yml: |
+    groups:
+    - name: test-alerts
+      rules:
+          - alert: SlackTestAlert
+            expr: vector(1)  # This expression always evaluates to true
+            for: 1m
+            labels:
+              severity: critical
+            annotations:
+              summary: "This is a test alert"
+              description: "This alert fires as part of testing Alertmanager."
+
+    - name: KubeStateAlerts
+
+      rules:
+
+        - alert: KubernetesNodeReady
+          expr: 'kube_node_status_condition{condition="Ready",status="true"} == 0'
+          for: 10m
+          labels:
+            severity: critical
+          annotations:
+            summary: Kubernetes Node ready (instance {{ $labels.instance }})
+            description: "Node {{ $labels.node }} has been unready for a long time\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+
+        - alert: KubernetesMemoryPressure
+          expr: 'kube_node_status_condition{condition="MemoryPressure",status="true"} == 1'
+          for: 2m
+          labels:
+            severity: critical
+          annotations:
+            summary: Kubernetes memory pressure (instance {{ $labels.instance }})
+            description: "{{ $labels.node }} has MemoryPressure condition\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+
+        - alert: KubernetesDiskPressure
+          expr: 'kube_node_status_condition{condition="DiskPressure",status="true"} == 1'
+          for: 2m
+          labels:
+            severity: critical

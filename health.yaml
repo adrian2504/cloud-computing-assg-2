@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: flask-app
-        image: yourusername/flask-app:v2
+        image: adrian2504/flask-app:v3
         ports:
         - containerPort: 5055
         livenessProbe:
